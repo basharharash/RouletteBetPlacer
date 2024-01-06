@@ -69,10 +69,10 @@
     <div class="container">
         <h1>Roulette Betting Game</h1>
         <input type="text" id="betInput" placeholder="Enter bet e.g., Bob red 500">
-        <button onclick="placeBet()">Place Bet</button>
-        <button onclick="clearBets()">Clear Bets</button>
+        <button id="placeBetBtn">Place Bet</button>
+        <button id="clearBetsBtn">Clear Bets</button>
         <input type="text" id="winInput" placeholder="Enter winning number e.g., 10">
-        <button onclick="calculateWinnings()">Declare Winner</button>
+        <button id="calculateWinningsBtn">Declare Winner</button>
         
         <h2>Current Bets</h2>
         <div id="currentBets" class="display-area"></div>
@@ -85,5 +85,14 @@
     </div>
 
     <script src="roulette.js"></script> <!-- Link to the provided JavaScript file -->
+    <script>
+        const placeBetBtn = document.getElementById('placeBetBtn');
+        const clearBetsBtn = document.getElementById('clearBetsBtn');
+        const calculateWinningsBtn = document.getElementById('calculateWinningsBtn');
+
+        placeBetBtn.addEventListener('click', placeBet);
+        clearBetsBtn.addEventListener('click', clearBets);
+        calculateWinningsBtn.addEventListener('click', calculateWinnings);
+    </script>
 </body>
 </html>
