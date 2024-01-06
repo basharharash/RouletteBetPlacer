@@ -60,8 +60,7 @@ class RouletteBetting {
                 totalPayout += winnings;
             }
         });
-
-        this.houseProfit += (this.totalBetAmount() - totalPayout);
+        this.houseProfit += (totalPayout - this.totalBetAmount());
         this.bets = []; // Clear current bets
         this.updateWinningBetsDisplay(winners);
         this.updateHouseProfitDisplay();
