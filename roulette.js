@@ -54,8 +54,8 @@ class RouletteBetting {
         this.bets.forEach(bet => {
             const { name, numbers, betAmount } = bet;
             if (numbers.includes(winningNumber)) {
-                const payoutRatio = this.getPayoutRatio(numbers.length);
-                const winnings = betAmount * payoutRatio + betAmount; // Include original bet
+                const payoutRatio = this.getPayoutRatio(numbers.length, numbers[0]); // Pass bet type
+                const winnings = betAmount * payoutRatio; // Adjust for the new payout ratios
                 winners.push({ name, winnings });
                 totalPayout += winnings;
             }
@@ -68,13 +68,20 @@ class RouletteBetting {
         this.updateCurrentBetsDisplay(); // Clear display of current bets
     }
 
-    getPayoutRatio(numNumbers) {
-        switch(numNumbers) {
-            case 1: return 35;
-            case 2: return 17;
-            case 3: return 11;
-            case 4: return 8;
-            default: return 0;
+    getPayoutRatio(numNumbers, betType) {
+        // Adjust payout ratios for red, black, even, odd, 1st, 2nd, and 3rd
+        switch (betType) {
+            case 'red':
+            case 'black':
+            case 'even':
+            case 'odd':
+                return 2;
+            case '1st':
+            case '2nd':
+            case '3rd':
+                return 3;
+            default:
+                return 0;
         }
     }
 
@@ -108,18 +115,3 @@ function placeBet() {
         roulette.placeBet(name, type, betAmount);
     } else {
         roulette.placeBet(name, type, betAmount);
-    }
-
-    document.getElementById('betInput').value = ''; // Clear input field
-}
-
-function calculateWinnings() {
-    const winningNumber = document.getElementById('winInput').value;
-    roulette.calculateWinnings(winningNumber);
-    document.getElementById('winInput').value = ''; // Clear input field
-}
-
-function clearBets() {
-    roulette.bets = [];
-    roulette.updateCurrentBetsDisplay();
-}
