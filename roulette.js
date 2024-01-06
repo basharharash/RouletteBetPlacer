@@ -5,32 +5,39 @@ class RouletteBetting {
     }
 
     placeBet(name, numbers, betAmount) {
-        numbers = numbers.split(',').map(num => parseInt(num, 10));
+        let parsedNumbers;
+
+        // Handle special cases for red, black, even, odd, 1st 12, 2nd 12, and 3rd 12
+        switch (numbers) {
+            case 'red':
+                parsedNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
+                break;
+            case 'black':
+                parsedNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
+                break;
+            case 'even':
+                parsedNumbers = Array.from({ length: 18 }, (_, i) => (i + 1) * 2);
+                break;
+            case 'odd':
+                parsedNumbers = Array.from({ length: 18 }, (_, i) => (i * 2) + 1);
+                break;
+            case '1st':
+                parsedNumbers = Array.from({ length: 12 }, (_, i) => i + 1);
+                break;
+            case '2nd':
+                parsedNumbers = Array.from({ length: 12 }, (_, i) => (i + 1) + 12);
+                break;
+            case '3rd':
+                parsedNumbers = Array.from({ length: 12 }, (_, i) => (i + 1) + 24);
+                break;
+            default:
+                // If it's not a special case, try parsing as a comma-separated list of numbers
+                parsedNumbers = numbers.split(',').map(num => parseInt(num, 10));
+        }
+
         betAmount = parseInt(betAmount, 10);
-        this.bets.push({ name, numbers, betAmount });
+        this.bets.push({ name, numbers: parsedNumbers, betAmount });
         this.updateCurrentBetsDisplay();
-    }
-
-    placeBetOnColor(name, color, betAmount) {
-        const numbers = (color === 'red') ? [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36] :
-                       (color === 'black') ? [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35] : [];
-
-        this.placeBet(name, numbers.join(','), betAmount);
-    }
-
-    placeBetOnEvenOdd(name, type, betAmount) {
-        const numbers = (type === 'even') ? Array.from({ length: 18 }, (_, i) => (i + 1) * 2) :
-                       (type === 'odd') ? Array.from({ length: 18 }, (_, i) => (i * 2) + 1) : [];
-
-        this.placeBet(name, numbers.join(','), betAmount);
-    }
-
-    placeBetOnDozen(name, dozen, betAmount) {
-        const numbers = (dozen === '1st') ? Array.from({ length: 12 }, (_, i) => i + 1) :
-                       (dozen === '2nd') ? Array.from({ length: 12 }, (_, i) => (i + 1) + 12) :
-                       (dozen === '3rd') ? Array.from({ length: 12 }, (_, i) => (i + 1) + 24) : [];
-
-        this.placeBet(name, numbers.join(','), betAmount);
     }
 
     calculateWinnings(winningNumber) {
@@ -97,12 +104,8 @@ function placeBet() {
     const betInputValue = document.getElementById('betInput').value;
     const [name, type, betAmount] = betInputValue.split(' ');
 
-    if (['red', 'black'].includes(type)) {
-        roulette.placeBetOnColor(name, type, betAmount);
-    } else if (['even', 'odd'].includes(type)) {
-        roulette.placeBetOnEvenOdd(name, type, betAmount);
-    } else if (['1st', '2nd', '3rd'].includes(type)) {
-        roulette.placeBetOnDozen(name, type, betAmount);
+    if (['red', 'black', 'even', 'odd', '1st', '2nd', '3rd'].includes(type)) {
+        roulette.placeBet(name, type, betAmount);
     } else {
         roulette.placeBet(name, type, betAmount);
     }
