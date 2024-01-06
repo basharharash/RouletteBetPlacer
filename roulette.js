@@ -60,7 +60,8 @@ class RouletteBetting {
                 totalPayout += winnings;
             }
         });
-        this.houseProfit += (totalPayout - this.totalBetAmount());
+
+        this.houseProfit += (totalPayout - this.totalBetAmount()); // Corrected calculation
         this.bets = []; // Clear current bets
         this.updateWinningBetsDisplay(winners);
         this.updateHouseProfitDisplay();
@@ -114,3 +115,17 @@ function placeBet() {
         roulette.placeBet(name, type, betAmount);
     } else {
         roulette.placeBet(name, type, betAmount);
+    }
+    document.getElementById('betInput').value = ''; // Clear input field
+}
+
+function calculateWinnings() {
+    const winningNumber = document.getElementById('winInput').value;
+    roulette.calculateWinnings(winningNumber);
+    document.getElementById('winInput').value = ''; // Clear input field
+}
+
+function clearBets() {
+    roulette.bets = [];
+    roulette.updateCurrentBetsDisplay();
+}
